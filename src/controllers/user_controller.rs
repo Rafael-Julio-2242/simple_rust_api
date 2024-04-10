@@ -1,4 +1,3 @@
-use actix_web::cookie::time::error;
 use sqlite::State;
 
 use crate::models::user::User;
@@ -116,7 +115,7 @@ pub fn delete_user(id: i64) -> Result<(), String> {
         Ok(connection) => {
 
             // Preciso validar se o usuário existe!
-            let queryValidacao = format!("
+            let query_validacao = format!("
                 SELECT 
                     id,
                     name,
@@ -125,7 +124,7 @@ pub fn delete_user(id: i64) -> Result<(), String> {
                 WHERE id = {}
             ", id);
 
-            let statement_result = connection.prepare(queryValidacao);
+            let statement_result = connection.prepare(query_validacao);
 
             if statement_result.is_err() {
                 return Err("An error ocorried!".to_string());

@@ -6,9 +6,3 @@ pub struct UpdateUserDTO {
     pub name: Option<String>,
     pub password: Option<String>
 }
-
-impl UpdateUserDTO {
-    pub fn new(id: i64, name: Option<String>, password: Option<String>) -> UpdateUserDTO {
-        UpdateUserDTO { id, name, password }
-    }
-}

@@ -7,7 +7,7 @@ mod dtos;
 
 // importando rotas importantes!
 use routes::users_route::get_users_route_config;
-
+use routes::notes_routes::get_notes_route_config;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -16,6 +16,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {   
         App::new()
             .configure(get_users_route_config)
+            .configure(get_notes_route_config)
     })
     .bind(("127.0.0.1", 8000))?
     .run()

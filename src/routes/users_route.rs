@@ -4,10 +4,6 @@ use crate::dtos::new_user_dto::NewUserDTO;
 use crate::controllers::user_controller;
 use crate::dtos::update_user_dto::UpdateUserDTO;
 
-#[get("/test")]
-async fn test() -> impl Responder {
-    HttpResponse::Ok().body("Hello ACTIX!!")
-}
 
 #[get("")]
 async fn get_users() -> impl Responder {
@@ -108,7 +104,6 @@ pub fn get_users_route_config(cfg: &mut web::ServiceConfig) {
     
     cfg.service(
         web::scope("/users")
-            .service(test)
             .service(get_users)
             .service(get_user)
             .service(new_user)

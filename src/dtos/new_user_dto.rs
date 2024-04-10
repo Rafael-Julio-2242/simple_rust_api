@@ -5,9 +5,3 @@ pub struct NewUserDTO {
     pub name: String,
     pub password: String
 }
-
-impl NewUserDTO {
-    pub fn new(name: String, password: String) -> NewUserDTO {
-        NewUserDTO { name, password }
-    }
-}
