@@ -1,27 +1,25 @@
-#[macro_use]
-extern crate rocket;
+use actix_web::{App, HttpServer};
 
-mod models;
 mod routes;
+mod controllers;
+mod models;
+mod dtos;
+
+// importando rotas importantes!
+use routes::users_route::get_users_route_config;
 
 
-#[get("/")]
-fn index() -> String {
-    String::from("ROCKEEET")
-}
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
 
-#[rocket::main]
-async fn main() {
-
-    let figment = rocket::Config::figment()
-        .merge(("port", 3000));
-
-
-
-
-    let _ = rocket::custom(figment)
-        .mount("/", routes![index])
-        .launch().await;
+    println!("Web Server started on port 8000");
+    HttpServer::new(|| {   
+        App::new()
+            .configure(get_users_route_config)
+    })
+    .bind(("127.0.0.1", 8000))?
+    .run()
+    .await
 
 
 }
