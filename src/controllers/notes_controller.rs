@@ -181,6 +181,46 @@ pub fn delete_note(id: i64) -> Result<(), String> {
     }
 }
 
+pub fn update_note(id: i64, title: Option<String>, description: Option<String>) -> Result<(), String> {
 
+    if title.is_none() && description.is_none() {
+        return Err(String::from("Nothing to change!"));
+    }
+
+    let con_result = sqlite::open("sqlite.db");
+
+    match con_result {
+        Ok(con) => {
+
+
+            let mut query = String::from("UPDATE note ");
+
+            if title.is_some() {
+                query += format!("SET title = '{}' ", title.unwrap()).as_str();
+            }
+            if description.is_some() {
+                if query.contains("SET") {
+                    query += format!(", description = '{}' ", description.unwrap()).as_str();
+                } else {
+                    query += format!("SET description = '{}' ", description.unwrap()).as_str();
+                }
+            }
+
+            query += format!("WHERE id = {} ", id).as_str();
+
+            let r = con.execute(query);
+
+            if r.is_err() {
+                return Err(r.unwrap_err().to_string());
+            }
+
+            Ok(())
+        },
+        Err(err) => {
+            return Err(err.to_string());
+        }
+    }
+
+}
 
 

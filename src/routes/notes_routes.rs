@@ -2,6 +2,7 @@ use actix_web::{web, HttpResponse, Responder, get, post, delete, patch};
 
 use crate::controllers::notes_controller;
 use crate::dtos::new_note_dto::NewNoteDTO;
+use crate::dtos::update_note_dto::UpdateNoteDTO;
 
 #[get("")]
 async fn get_all_notes() -> impl Responder {
@@ -73,6 +74,26 @@ async fn delete_note(path: web::Path<String>) -> impl Responder {
     HttpResponse::Ok().body("Note deleted successfully")
 }
 
+#[patch("/update_note")]
+async fn update_note(update_note: web::Json<UpdateNoteDTO>) -> impl Responder {
+
+
+    let update_note_dto = update_note.into_inner();
+
+    if update_note_dto.title.is_none() && update_note_dto.description.is_none() {
+        return HttpResponse::BadRequest().body("Nothing to change...");
+    }
+
+    let r = notes_controller::update_note(update_note_dto.id, update_note_dto.title, update_note_dto.description);
+
+    if r.is_err() {
+        return HttpResponse::InternalServerError().body(format!("Error updating note: {}", r.unwrap_err()));
+    }
+
+    HttpResponse::Ok().body("Note updated successfully")
+
+}
+
 pub fn get_notes_route_config(cfg: &mut web::ServiceConfig) {
     cfg.service(
         web::scope("/notes")
@@ -80,6 +101,7 @@ pub fn get_notes_route_config(cfg: &mut web::ServiceConfig) {
             .service(get_user_notes)
             .service(new_note)
             .service(delete_note)
+            .service(update_note)
     );
 }
 
