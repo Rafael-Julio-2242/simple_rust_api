@@ -131,10 +131,12 @@ pub fn delete_user(id: i64) -> Result<(), String> {
             }
 
             let mut statement = statement_result.unwrap();
+            let mut count = 0;
+            while let Ok(State::Row) = statement.next() {
+                count += 1;
+            }
 
-            statement.next().unwrap(); // To make things Work !
-
-            if statement.into_iter().count() == 0 {
+            if count == 0 {
                 return Err("User not found".to_string());
             }
 
